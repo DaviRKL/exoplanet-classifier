@@ -1,0 +1,23 @@
+﻿<mat-card class="card">
+  <mat-card-title>API Status</mat-card-title>
+  <mat-card-content>
+    <div *ngIf="loading" class="center">
+      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+    </div>
+
+    <div *ngIf="!loading && health">
+      <p><strong>Message:</strong> {{ health.message }}</p>
+      <p>
+        <strong>Model loaded:</strong>
+        <span [ngClass]="{ 'status-online': health.model_loaded, 'status-offline': !health.model_loaded }">
+          {{ health.model_loaded ? 'Yes' : 'No' }}
+        </span>
+      </p>
+    </div>
+
+    <mat-error *ngIf="!loading && error">{{ error }}</mat-error>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button color="primary" (click)="fetchHealth()">Refresh</button>
+  </mat-card-actions>
+</mat-card>

@@ -1,0 +1,26 @@
+﻿<mat-card class="card">
+  <mat-card-title>Predizer disposição KOI</mat-card-title>
+  <mat-card-content>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="predict-form">
+      <div class="form-grid">
+        <mat-form-field appearance="outline" *ngFor="let field of fields">
+          <mat-label>{{ field.label }}</mat-label>
+          <input matInput type="number" [formControlName]="field.name" step="any" />
+          <mat-error *ngIf="form.get(field.name)?.hasError('required')">Obrigatório</mat-error>
+          <mat-error *ngIf="form.get(field.name)?.hasError('min')">Valor deve ser positivo</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="actions">
+        <button mat-raised-button color="primary" type="submit" [disabled]="loading">Prever</button>
+      </div>
+    </form>
+
+    <div class="result" *ngIf="prediction">
+      <mat-icon color="primary">auto_awesome</mat-icon>
+      <span>Resultado: <strong>{{ prediction.prediction }}</strong></span>
+    </div>
+
+    <mat-error *ngIf="error">{{ error }}</mat-error>
+    <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+  </mat-card-content>
+</mat-card>

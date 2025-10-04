@@ -1,0 +1,16 @@
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 120px;
+}
+
+.status-online {
+  color: #2e7d32;
+  font-weight: 600;
+}
+
+.status-offline {
+  color: #c62828;
+  font-weight: 600;
+}

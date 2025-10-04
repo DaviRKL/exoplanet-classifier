@@ -1,0 +1,40 @@
+﻿# Python / FastAPI
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+.env
+.venv
+venv/
+.env.local
+.env.*.local
+.envrc
+
+# Model artifacts
+models/*.joblib
+models/*.pkl
+
+# Logs / caches
+.DS_Store
+Thumbs.db
+*.log
+
+# Node / Angular
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/cache/
+frontend/.temp/
+
+# IDE / tooling
+.vscode/
+.idea/
+*.code-workspace
+
+# Coverage / test outputs
+coverage/
+pytest_cache/
+
+# Build artifacts
+**/__pycache__/

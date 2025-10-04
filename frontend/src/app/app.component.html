@@ -1,0 +1,20 @@
+﻿<div class="app-shell">
+  <mat-toolbar color="primary">
+    <img src="assets/team-logo.png" alt="Chubby Rockets logo" class="team-logo" />
+    <span>{{ title }}</span>
+    <span class="spacer"></span>
+    <a mat-button routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Dashboard</a>
+    <a mat-button routerLink="/predict" routerLinkActive="active">Prediction</a>
+    <a mat-button routerLink="/train" routerLinkActive="active">Training</a>
+    <a mat-button routerLink="/metrics" routerLinkActive="active">Metrics</a>
+    <a mat-button routerLink="/feature-importance" routerLinkActive="active">Feature Importance</a>
+  </mat-toolbar>
+
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+
+  <mat-toolbar color="primary" class="footer" role="contentinfo">
+    <span>NASA Space Apps 2025 - A World Away</span>
+  </mat-toolbar>
+</div>

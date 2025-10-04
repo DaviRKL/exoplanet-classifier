@@ -1,0 +1,33 @@
+﻿<mat-card class="card">
+  <mat-card-title>Feature Importance</mat-card-title>
+  <mat-card-content>
+    <div class="controls">
+      <mat-form-field appearance="outline">
+        <mat-label>Top N</mat-label>
+        <input matInput type="number" [(ngModel)]="topN" min="1" />
+      </mat-form-field>
+      <button mat-raised-button color="primary" (click)="fetchData()" [disabled]="loading">
+        Refresh
+      </button>
+    </div>
+
+    <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+    <mat-error *ngIf="error">{{ error }}</mat-error>
+
+    <div *ngIf="data">
+      <p>Model: <strong>{{ data.model }}</strong></p>
+      <table mat-table [dataSource]="toDataSource(data.importances)" class="mat-elevation-z2">
+        <ng-container matColumnDef="feature">
+          <th mat-header-cell *matHeaderCellDef>Feature</th>
+          <td mat-cell *matCellDef="let element">{{ element.feature }}</td>
+        </ng-container>
+        <ng-container matColumnDef="importance">
+          <th mat-header-cell *matHeaderCellDef>Importance</th>
+          <td mat-cell *matCellDef="let element">{{ element.importance | number: '1.3-3' }}</td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+  </mat-card-content>
+</mat-card>

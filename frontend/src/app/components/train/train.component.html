@@ -1,0 +1,44 @@
+﻿<mat-card class="card">
+  <mat-card-title>Train Models</mat-card-title>
+  <mat-card-content>
+    <div class="upload">
+      <input type="file" accept=".csv" (change)="onFileChange($event)" />
+      <span *ngIf="selectedFile">Selected file: {{ selectedFile.name }}</span>
+    </div>
+    <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="loading">
+      Train
+    </button>
+
+    <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+    <mat-error *ngIf="error">{{ error }}</mat-error>
+
+    <div *ngIf="response" class="results">
+      <h3>Best model: {{ response.best_model }}</h3>
+      <table mat-table [dataSource]="asArray(response.metrics)" class="mat-elevation-z2">
+        <ng-container matColumnDef="model">
+          <th mat-header-cell *matHeaderCellDef>Model</th>
+          <td mat-cell *matCellDef="let element">{{ element.model }}</td>
+        </ng-container>
+        <ng-container matColumnDef="accuracy">
+          <th mat-header-cell *matHeaderCellDef>Accuracy</th>
+          <td mat-cell *matCellDef="let element">{{ element.data.accuracy | number: '1.3-3' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="precision">
+          <th mat-header-cell *matHeaderCellDef>Precision</th>
+          <td mat-cell *matCellDef="let element">{{ element.data.precision | number: '1.3-3' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="recall">
+          <th mat-header-cell *matHeaderCellDef>Recall</th>
+          <td mat-cell *matCellDef="let element">{{ element.data.recall | number: '1.3-3' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="f1">
+          <th mat-header-cell *matHeaderCellDef>F1</th>
+          <td mat-cell *matCellDef="let element">{{ element.data.f1 | number: '1.3-3' }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+  </mat-card-content>
+</mat-card>

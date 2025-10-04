@@ -1,0 +1,17 @@
+.spacer {
+  flex: 1 1 auto;
+}
+
+a.active {
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.footer {
+  justify-content: center;
+}
+.team-logo {
+  height: 36px;
+  margin-right: 12px;
+  border-radius: 4px;
+}

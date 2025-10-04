@@ -1,0 +1,53 @@
+<mat-card class="card">
+  <mat-card-title>Evaluation Metrics</mat-card-title>
+  <mat-card-content>
+    <div *ngIf="loading" class="center">
+      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+    </div>
+
+    <mat-error *ngIf="error">{{ error }}</mat-error>
+
+    <ng-container *ngIf="!loading && metrics">
+      <p>Best model: <strong>{{ metrics.best_model }}</strong></p>
+      <table mat-table [dataSource]="asArray(metrics.metrics)" class="mat-elevation-z2">
+        <ng-container matColumnDef="model">
+          <th mat-header-cell *matHeaderCellDef>Model</th>
+          <td mat-cell *matCellDef="let element">{{ element.model }}</td>
+        </ng-container>
+        <ng-container matColumnDef="accuracy">
+          <th mat-header-cell *matHeaderCellDef>Accuracy</th>
+          <td mat-cell *matCellDef="let element">{{ element.data.accuracy | number: '1.3-3' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="precision">
+          <th mat-header-cell *matHeaderCellDef>Precision</th>
+          <td mat-cell *matCellDef="let element">{{ element.data.precision | number: '1.3-3' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="recall">
+          <th mat-header-cell *matHeaderCellDef>Recall</th>
+          <td mat-cell *matCellDef="let element">{{ element.data.recall | number: '1.3-3' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="f1">
+          <th mat-header-cell *matHeaderCellDef>F1</th>
+          <td mat-cell *matCellDef="let element">{{ element.data.f1 | number: '1.3-3' }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </ng-container>
+
+    <div class="plots" *ngIf="plots">
+      <div class="plot">
+        <h3>Confusion Matrix</h3>
+        <img [src]="plots.confusion_matrix" alt="Confusion Matrix" />
+      </div>
+      <div class="plot">
+        <h3>Feature Importance</h3>
+        <img [src]="plots.feature_importance" alt="Feature Importance" />
+      </div>
+    </div>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-stroked-button color="primary" (click)="fetchData()">Refresh</button>
+  </mat-card-actions>
+</mat-card>
