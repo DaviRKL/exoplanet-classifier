@@ -2,16 +2,58 @@
   flex: 1 1 auto;
 }
 
-a.active {
+.team-logo {
+  height: 40px;
+  margin-right: 16px;
+  transition: transform 0.3s ease;
+}
+
+.team-logo:hover {
+  transform: rotate(15deg) scale(1.1);
+}
+
+.app-title {
   font-weight: 600;
-  text-decoration: underline;
+  font-size: 1.25rem;
+}
+
+.desktop-nav a {
+  margin: 0 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  position: relative;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  color: var(--text-secondary);
+}
+
+.desktop-nav a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -4px;
+  left: 50%;
+  background-color: var(--accent-color);
+  transition: all 0.3s ease-out;
+  transform: translateX(-50%);
+}
+
+.desktop-nav a:hover {
+  background-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+.desktop-nav a.active {
+  color: var(--accent-hover);
+  font-weight: 600;
+}
+
+.desktop-nav a.active::after {
+  width: 60%;
 }
 
 .footer {
   justify-content: center;
-}
-.team-logo {
-  height: 36px;
-  margin-right: 12px;
-  border-radius: 4px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
 }

@@ -1,23 +1,89 @@
-﻿<mat-card class="card">
-  <mat-card-title>API Status</mat-card-title>
-  <mat-card-content>
-    <div *ngIf="loading" class="center">
-      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+﻿<div class="dashboard-container">
+  <div *ngIf="loading" class="loading-overlay">
+    <mat-progress-spinner mode="indeterminate" diameter="60"></mat-progress-spinner>
+    <p>Loading dashboard data...</p>
+  </div>
+
+  <div *ngIf="!loading && error" class="error-container card">
+    <h2>An Error Occurred</h2>
+    <p>{{ error }}</p>
+    <button mat-stroked-button color="warn" (click)="refreshData()">Try Again</button>
+  </div>
+
+  <div *ngIf="!loading && !error" class="main-content-area">
+    <div *ngIf="!isAdvancedMode" @modeTransition class="basic-mode-container">
+      <div class="grid-header">
+        <h2>Last Correct Predictions</h2>
+        <p>These are the last 10 exoplanets confirmed by our AI model.</p>
+      </div>
+      <div class="planets-grid">
+        <div *ngFor="let planet of lastPredictedPlanets" class="planet-card">
+          <mat-icon>public</mat-icon>
+          <span>{{ planet }}</span>
+        </div>
+      </div>
     </div>
 
-    <div *ngIf="!loading && health">
-      <p><strong>Message:</strong> {{ health.message }}</p>
-      <p>
-        <strong>Model loaded:</strong>
-        <span [ngClass]="{ 'status-online': health.model_loaded, 'status-offline': !health.model_loaded }">
-          {{ health.model_loaded ? 'Yes' : 'No' }}
-        </span>
-      </p>
+    <div *ngIf="isAdvancedMode" @modeTransition class="advanced-mode-container">
+      <div class="grid-header">
+        <h2>Advanced Performance Analysis</h2>
+        <p>Detailed visualization of metrics from the <strong>{{ bestModelName }}</strong> model.</p>
+      </div>
+      <div class="charts-grid">
+        <div class="chart-card">
+          <h3>Training Evolution</h3>
+          <div class="chart-wrapper">
+            <canvas *ngIf="lineChartData" baseChart type="line" [data]="lineChartData" [options]="commonChartOptions"></canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <h3>Overall Accuracy</h3>
+          <div class="chart-wrapper">
+            <canvas *ngIf="pieChartData" baseChart type="pie" [data]="pieChartData" [options]="pieChartOptions"></canvas>
+          </div>
+        </div>
+        <div class="chart-card full-span">
+          <h3>Feature Importance</h3>
+          <div class="chart-wrapper" style="height: 350px;">
+            <canvas *ngIf="barChartData" baseChart type="bar" [data]="barChartData" [options]="commonChartOptions"></canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <h3>Confusion Matrix</h3>
+          <div class="confusion-matrix" *ngIf="confusionMatrix.length > 0">
+            <div class="cm-predicted-legend">Predicted</div>
+            <div class="cm-axis cm-top-axis">
+              <div class="cm-cell-placeholder"></div>
+              <div *ngFor="let label of confusionMatrixClasses" class="cm-header">{{ label }}</div>
+            </div>
+            <div *ngFor="let row of confusionMatrix; let i = index" class="cm-row">
+              <div class="cm-axis cm-side-axis">{{ confusionMatrixClasses[i] }}</div>
+              <div *ngFor="let cell of row; let j = index" class="cm-cell" [ngClass]="{'diagonal': i === j}">
+                {{ cell }}
+              </div>
+            </div>
+            <div class="cm-actual-legend">Actual</div>
+          </div>
+        </div>
+        <div class="chart-card">
+          <h3>Latest Discoveries</h3>
+          <ul class="details-list">
+            <li *ngFor="let planet of latestExoplanetDiscoveries">
+              <strong>{{ planet.name }}</strong> - Status: {{planet.status}}, Radius: {{planet.radius}}, Discovered: {{planet.discovery}}
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
 
-    <mat-error *ngIf="!loading && error">{{ error }}</mat-error>
-  </mat-card-content>
-  <mat-card-actions>
-    <button mat-raised-button color="primary" (click)="fetchHealth()">Refresh</button>
-  </mat-card-actions>
-</mat-card>
+    <div class="dashboard-actions">
+        <button mat-stroked-button (click)="refreshData()" [disabled]="loading">
+          <mat-icon>refresh</mat-icon>
+          Refresh Data
+        </button>
+        <mat-slide-toggle [checked]="isAdvancedMode" (change)="isAdvancedMode = !isAdvancedMode" color="primary">
+          Advanced Mode
+        </mat-slide-toggle>
+    </div>
+  </div>
+</div>

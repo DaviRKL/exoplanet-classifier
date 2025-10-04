@@ -1,13 +1,15 @@
 ﻿<div class="app-shell">
   <mat-toolbar color="primary">
-    <img src="assets/team-logo.png" alt="Chubby Rockets logo" class="team-logo" />
-    <span>{{ title }}</span>
+    <img src="../assets/logo.png" alt="Chubby Rockets logo" class="team-logo" />
+    <span class="app-title">{{ title }}</span>
     <span class="spacer"></span>
-    <a mat-button routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Dashboard</a>
-    <a mat-button routerLink="/predict" routerLinkActive="active">Prediction</a>
-    <a mat-button routerLink="/train" routerLinkActive="active">Training</a>
-    <a mat-button routerLink="/metrics" routerLinkActive="active">Metrics</a>
-    <a mat-button routerLink="/feature-importance" routerLinkActive="active">Feature Importance</a>
+    <nav class="desktop-nav">
+      <a mat-button routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+      <a mat-button routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+      <a mat-button routerLink="/train" routerLinkActive="active">Training</a>
+      <a mat-button routerLink="/metrics" routerLinkActive="active">Metrics</a>
+      <a mat-button routerLink="/feature-importance" routerLinkActive="active">Feature Importance</a>
+    </nav>
   </mat-toolbar>
 
   <main class="main-content">
@@ -15,6 +17,6 @@
   </main>
 
   <mat-toolbar color="primary" class="footer" role="contentinfo">
-    <span>NASA Space Apps 2025 - A World Away</span>
+    <span>NASA Space Apps 2025 - A World Away - Team Chubby Rockets</span>
   </mat-toolbar>
 </div>

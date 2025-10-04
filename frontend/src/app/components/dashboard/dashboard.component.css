@@ -1,16 +1,247 @@
-.center {
+:host {
+  display: block;
+}
+
+.dashboard-container {
+  padding-bottom: 2rem;
+}
+
+/* --- Estados de Loading e Erro --- */
+.loading-overlay, .error-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  gap: 1rem;
+}
+.error-container {
+  background-color: rgba(248, 113, 113, 0.1);
+  border: 1px solid var(--error-color);
+  border-radius: 12px;
+}
+
+/* --- Cabeçalho Comum --- */
+.grid-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+.grid-header h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+}
+.grid-header p {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  max-width: 700px;
+  margin: 0 auto;
+}
+.grid-header strong {
+  color: var(--accent-color);
+}
+
+/* --- Modo Básico --- */
+.planets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+.planet-card {
+  background-color: var(--secondary-bg);
+  padding: 2rem;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.planet-card mat-icon {
+  color: var(--text-secondary);
+  transition: color 0.3s ease;
+}
+.planet-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--accent-color);
+  box-shadow: 0 8px 25px rgba(226, 139, 18, 0.15);
+  color: var(--accent-hover);
+}
+.planet-card:hover mat-icon {
+  color: var(--accent-color);
+}
+
+/* --- Modo Avançado --- */
+.charts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+.chart-card {
+  background-color: var(--secondary-bg);
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  padding: 1.5rem;
+}
+.chart-card.full-span {
+  grid-column: 1 / -1;
+}
+.chart-card h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: var(--text-primary);
+}
+.chart-wrapper {
+  position: relative;
+  height: 300px;
+}
+
+/* --- Matriz de Confusão --- */
+.confusion-matrix {
+  display: grid;
+  gap: 8px;
+  padding: 1rem;
+  position: relative;
+  font-size: 1rem;
+  justify-content: center;
+}
+.cm-row { display: contents; }
+.cm-cell, .cm-header, .cm-cell-placeholder {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 120px;
+  background-color: #334155;
+  border-radius: 4px;
+  width: 80px;
+  height: 80px;
+  font-weight: bold;
+}
+.cm-header {
+  background-color: transparent;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+.cm-cell.diagonal {
+  background-color: var(--success-color);
+  color: var(--primary-bg);
+}
+.cm-axis {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  color: var(--text-secondary);
+}
+.cm-actual-legend {
+  position: absolute;
+  left: -25px;
+  top: 50%;
+  transform: translateY(-50%) rotate(180deg);
+  writing-mode: vertical-lr;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+.cm-predicted-legend {
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.9rem;
+  color: var(--text-secondary);
 }
 
-.status-online {
-  color: #2e7d32;
-  font-weight: 600;
+/* --- Lista de Detalhes --- */
+.details-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.75rem;
+}
+.details-list li {
+  background-color: var(--primary-bg);
+  padding: 0.8rem 1rem;
+  border-radius: 6px;
+  border-left: 4px solid var(--accent-color);
+  font-size: 0.9rem;
 }
 
-.status-offline {
-  color: #c62828;
+/* --- Rodapé de Ações (Estilo da div removido) --- */
+.dashboard-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  margin-top: 2.5rem;
+  border-top: 1px solid var(--border-color);
+}
+
+/* --- Novo Estilo para os Botões --- */
+.dashboard-actions button.mat-stroked-button {
   font-weight: 600;
+  color: var(--accent-color);
+  border-color: var(--accent-color);
+  border-width: 2px;
+  padding: 0 24px;
+  line-height: 40px;
+  border-radius: 50px; /* Bordas arredondadas */
+  transition: all 0.3s ease-in-out;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+}
+
+.dashboard-actions button.mat-stroked-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background-color: var(--accent-color);
+  transition: width 0.4s ease-in-out;
+  z-index: -1;
+}
+
+.dashboard-actions button.mat-stroked-button:hover::before {
+  width: 100%; /* Efeito de preenchimento no hover */
+}
+
+.dashboard-actions button.mat-stroked-button:hover {
+  color: var(--primary-bg); /* Cor do texto muda no hover */
+  transform: scale(1.05); /* Leve aumento de tamanho */
+}
+
+.dashboard-actions mat-slide-toggle {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+
+/* --- Responsividade --- */
+@media (max-width: 992px) {
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+  .chart-card.full-span {
+    grid-column: auto;
+  }
+}
+@media (max-width: 768px) {
+  .grid-header h2 { font-size: 2rem; }
+  .dashboard-actions {
+    flex-direction: column;
+    gap: 1.5rem;
+    border-top: none; /* Remove a linha no mobile para um look mais limpo */
+  }
 }

@@ -13,6 +13,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
+// IMPORTAÇÃO ADICIONADA AQUI
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { BaseChartDirective } from 'ng2-charts';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -21,6 +24,7 @@ import { PredictComponent } from './components/predict/predict.component';
 import { TrainComponent } from './components/train/train.component';
 import { MetricsComponent } from './components/metrics/metrics.component';
 import { FeatureImportanceComponent } from './components/feature-importance/feature-importance.component';
+import { HomeComponent } from './components/home/home.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +33,8 @@ import { FeatureImportanceComponent } from './components/feature-importance/feat
     PredictComponent,
     TrainComponent,
     MetricsComponent,
-    FeatureImportanceComponent
+    FeatureImportanceComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
@@ -46,7 +51,9 @@ import { FeatureImportanceComponent } from './components/feature-importance/feat
     MatProgressSpinnerModule,
     MatProgressBarModule,
     MatTableModule,
-    MatIconModule
+    MatIconModule,
+    MatSlideToggleModule, // MÓDULO ADICIONADO AOS IMPORTS
+    BaseChartDirective
   ],
   providers: [],
   bootstrap: [AppComponent]

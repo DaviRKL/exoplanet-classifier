@@ -1,32 +1,76 @@
-@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+/* Importando a fonte Poppins do Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+/* Variáveis CSS para o nosso Tema Espacial */
+:root {
+  --primary-bg: #0f172a; /* Azul noite profundo */
+  --secondary-bg: #1e293b; /* Azul ardósia para cards */
+  --text-primary: #e2e8f0; /* Branco suave para leitura */
+  --text-secondary: #94a3b8; /* Cinza azulado para descrições */
+  --accent-color: #e28b12; /* Laranja cósmico para destaques (SUA COR) */
+  --accent-hover: #f9a825; /* Laranja mais claro para hover */
+  --border-color: #334155;
+  --success-color: #4ade80;
+  --error-color: #f87171;
+}
+
+/* Resets Globais e Estilos Base */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
 html, body {
   height: 100%;
 }
 
 body {
-  margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-  background-color: #f4f6fb;
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--primary-bg);
+  color: var(--text-primary);
+  line-height: 1.6;
 }
 
-.app-shell {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
+/* Estilos de Conteúdo Principal e Animação */
 .main-content {
   flex: 1;
   padding: 24px;
+  /* Animação de entrada para o conteúdo da rota */
+  animation: fadeIn 0.6s ease-in-out;
 }
 
 .card {
-  margin-bottom: 16px;
+  background-color: var(--secondary-bg);
+  border-radius: 12px;
+  padding: 2rem;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  margin-bottom: 24px;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(226, 139, 18, 0.1);
 }
 
 .mat-toolbar.mat-primary {
+  background: var(--secondary-bg) !important;
+  border-bottom: 1px solid var(--border-color);
   position: sticky;
   top: 0;
   z-index: 1000;
+}
+
+/* Animações Globais */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

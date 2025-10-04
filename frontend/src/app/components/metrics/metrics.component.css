@@ -1,22 +1,47 @@
-.center {
+.center-spinner {
   display: flex;
   justify-content: center;
-  margin: 24px 0;
+  padding: 48px 0;
 }
 
-.plots {
+.metrics-content {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.best-model-info {
+  font-size: 1.2rem;
+  text-align: center;
+  padding: 1rem;
+  background-color: rgba(56, 189, 248, 0.1);
+  border: 1px solid var(--accent-color);
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+
+.metrics-table {
+  width: 100%;
+  margin-bottom: 32px;
+  background-color: transparent;
+}
+
+/* ... Estilos para a tabela ... */
+
+.plots-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   gap: 24px;
   margin-top: 24px;
 }
 
-.plot {
-  text-align: center;
+.chart-container {
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
 }
 
-.plot img {
-  max-width: 100%;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+.chart-container h3 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: var(--text-secondary);
 }

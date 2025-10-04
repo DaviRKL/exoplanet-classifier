@@ -1,0 +1,53 @@
+<div class="home-container">
+  <section class="hero-section">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1 class="fade-in">Shaping Tomorrow’s Exploration</h1>
+      <p class="fade-in-delay">
+        Our tool will revolutionize space exploration in search of exoplanets.
+        Unlocking the secrets of the universe through innovation. The future of interstellar discovery starts here.
+      </p>
+      <a routerLink="/dashboard" class="cta-button fade-in-delay-2">Start Discovery</a>
+    </div>
+    <a href="#about" class="scroll-down-indicator">
+      <span></span>
+    </a>
+  </section>
+
+  <section #scrollTarget id="about" class="content-section" [@scrollAnimation]="states[0] || 'out'">
+    <div class="section-container about-layout">
+      <div class="image-content">
+        <img src="assets/team-logo.png" alt="Chubby Rockets Logo" class="about-image"/>
+      </div>
+      <div class="text-content">
+        <h2>From Data to Discovery</h2>
+        <p>
+          Our project transforms raw telescopic data from NASA's Kepler mission into actionable insights. Using a sophisticated ensemble of machine learning models, we provide a powerful tool for astronomers and enthusiasts to classify Kepler Objects of Interest (KOI) with unprecedented accuracy.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section #scrollTarget class="features-section" [@scrollAnimation]="states[1] || 'out'">
+    <div class="section-container">
+      <h2>A New Frontier of Features</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <mat-icon>auto_awesome</mat-icon>
+          <h3>AI-Powered Precision</h3>
+          <p>Leverage real-time predictions from our fine-tuned models to classify potential exoplanets with confidence.</p>
+        </div>
+        <div class="feature-card">
+          <mat-icon>insights</mat-icon>
+          <h3>Deep Model Insights</h3>
+          <p>Explore detailed performance metrics and feature importance charts to understand the 'why' behind every classification.</p>
+        </div>
+        <div class="feature-card">
+          <mat-icon>public</mat-icon>
+          <h3>NASA's Legacy, Reimagined</h3>
+          <p>Trained on the comprehensive Kepler catalog, our tool stands on the shoulders of giants to push the boundaries of discovery.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

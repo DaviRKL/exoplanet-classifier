@@ -5,10 +5,11 @@ import { FeatureImportanceComponent } from './components/feature-importance/feat
 import { MetricsComponent } from './components/metrics/metrics.component';
 import { PredictComponent } from './components/predict/predict.component';
 import { TrainComponent } from './components/train/train.component';
+import { HomeComponent } from './components/home/home.component';
 
 const routes: Routes = [
-  { path: '', component: DashboardComponent },
-  { path: 'predict', component: PredictComponent },
+  { path: '', component: HomeComponent },
+  { path: 'dashboard', component: DashboardComponent },
   { path: 'train', component: TrainComponent },
   { path: 'metrics', component: MetricsComponent },
   { path: 'feature-importance', component: FeatureImportanceComponent },
