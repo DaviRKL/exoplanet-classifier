@@ -24,14 +24,22 @@ from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 from xgboost import XGBClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.svm import SVC
+from sklearn.ensemble import GradientBoostingClassifier
 
 FEATURE_COLUMNS: List[str] = [
-    "koi_period",
-    "koi_duration",
-    "koi_depth",
-    "koi_prad",
-    "koi_steff",
-    "koi_srad"
+    # "koi_steff",
+    # "koi_period",
+    # "koi_duration",
+    # "koi_depth",
+    # "koi_prad",
+    # "koi_srad",
+
+    "koi_fpflag_nt", "koi_fpflag_ss", "koi_fpflag_co", "koi_fpflag_ec",
+    "koi_period", "koi_time0bk", "koi_impact", "koi_duration", "koi_depth",
+    "koi_prad", "koi_teq", "koi_insol", "koi_model_snr",
+    "koi_steff", "koi_slogg", "koi_srad", "ra", "dec", "koi_kepmag"
 ]
 TARGET_COLUMN = "koi_disposition"
 
@@ -111,8 +119,11 @@ class ModelBundle:
 def load_dataset(path: Path = DEFAULT_DATA_PATH) -> pd.DataFrame:
     """Load the KOI cumulative catalog and standardize the disposition labels."""
 
+    label_encoder = LabelEncoder()
+
     df = pd.read_csv(path, comment="#")
-    df[TARGET_COLUMN] = df[TARGET_COLUMN].astype(str).str.strip().str.upper()
+    df_preprocessing = df[TARGET_COLUMN].astype(str).str.strip().str.upper()
+    df[TARGET_COLUMN] = label_encoder.fit_transform(df_preprocessing)
     return df
 
 
@@ -126,7 +137,7 @@ def build_training_table(df: pd.DataFrame) -> pd.DataFrame:
     #         lambda row: estimate_stellar_mass(row.get("koi_srad"), row.get("koi_slogg")),
     #         axis=1,
     #     )
-
+    
     required_columns = FEATURE_COLUMNS + [TARGET_COLUMN]
     missing = [col for col in required_columns if col not in df.columns]
     if missing:
@@ -194,15 +205,31 @@ def train_models(df: pd.DataFrame) -> Tuple[ModelBundle, Dict[str, TrainingMetri
     )
 
     candidates = {
-        "RandomForest": _build_pipeline(RandomForestClassifier(n_estimators=300, random_state=42, class_weight="balanced")),
+        "RandomForest": _build_pipeline(
+            RandomForestClassifier(
+                criterion="entropy",
+                n_estimators=300, 
+                random_state=42, 
+                class_weight="balanced",
+                # max_depth=12
+            )
+        ),
         "XGBoost": _build_pipeline(
             XGBClassifier(
                 use_label_encoder=False,
                 eval_metric="mlogloss",
                 random_state=42,
                 n_estimators=400,
-                learning_rate=0.10,
-                max_depth=6,
+                learning_rate=1.0,
+                max_depth=8,
+            )
+        ),
+        "GradientBoosting": _build_pipeline(
+            GradientBoostingClassifier(
+                n_estimators=300, 
+                learning_rate=0.05, 
+                random_state=42,
+                max_depth=8
             )
         ),
     }
