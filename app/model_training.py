@@ -92,20 +92,20 @@ class ModelBundle:
         )
 
 
-def estimate_stellar_mass(koi_srad: float | None, koi_slogg: float | None) -> float | None:
-    """Estimate stellar mass (in solar masses) when it is missing in the catalog."""
+# def estimate_stellar_mass(koi_srad: float | None, koi_slogg: float | None) -> float | None:
+#     """Estimate stellar mass (in solar masses) when it is missing in the catalog."""
 
-    if koi_srad is None or koi_slogg is None or np.isnan(koi_srad) or np.isnan(koi_slogg):
-        return None
-    if koi_srad <= 0:
-        return None
+#     if koi_srad is None or koi_slogg is None or np.isnan(koi_srad) or np.isnan(koi_slogg):
+#         return None
+#     if koi_srad <= 0:
+#         return None
 
-    log_g_sun = 4.438  # Surface gravity of the Sun in log10(cm/s^2).
-    log_mass = koi_slogg - log_g_sun + 2 * np.log10(koi_srad)
-    mass = float(10 ** log_mass)
-    if not np.isfinite(mass):
-        return None
-    return mass
+#     log_g_sun = 4.438  # Surface gravity of the Sun in log10(cm/s^2).
+#     log_mass = koi_slogg - log_g_sun + 2 * np.log10(koi_srad)
+#     mass = float(10 ** log_mass)
+#     if not np.isfinite(mass):
+#         return None
+#     return mass
 
 
 def load_dataset(path: Path = DEFAULT_DATA_PATH) -> pd.DataFrame:
@@ -121,11 +121,11 @@ def build_training_table(df: pd.DataFrame) -> pd.DataFrame:
 
     df = df.copy()
 
-    if "koi_smass" not in df.columns:
-        df["koi_smass"] = df.apply(
-            lambda row: estimate_stellar_mass(row.get("koi_srad"), row.get("koi_slogg")),
-            axis=1,
-        )
+    # if "koi_smass" not in df.columns:
+    #     df["koi_smass"] = df.apply(
+    #         lambda row: estimate_stellar_mass(row.get("koi_srad"), row.get("koi_slogg")),
+    #         axis=1,
+    #     )
 
     required_columns = FEATURE_COLUMNS + [TARGET_COLUMN]
     missing = [col for col in required_columns if col not in df.columns]
@@ -201,7 +201,7 @@ def train_models(df: pd.DataFrame) -> Tuple[ModelBundle, Dict[str, TrainingMetri
                 eval_metric="mlogloss",
                 random_state=42,
                 n_estimators=400,
-                learning_rate=0.05,
+                learning_rate=0.10,
                 max_depth=6,
             )
         ),
