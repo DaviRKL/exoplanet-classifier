@@ -17,10 +17,16 @@
         <p>These are the last 10 exoplanets confirmed by our AI model.</p>
       </div>
       <div class="planets-grid">
-        <div *ngFor="let planet of lastPredictedPlanets" class="planet-card">
-          <mat-icon>public</mat-icon>
-          <span>{{ planet }}</span>
-        </div>
+        
+        <a *ngFor="let planet of lastPredictedPlanets" 
+           [routerLink]="['/exoplanet', planet]"
+           class="planet-card-link">
+          <div class="planet-card">
+            <mat-icon>public</mat-icon>
+            <span>{{ planet }}</span>
+          </div>
+        </a>
+        
       </div>
     </div>
 
@@ -69,7 +75,7 @@
           <h3>Latest Discoveries</h3>
           <ul class="details-list">
             <li *ngFor="let planet of latestExoplanetDiscoveries">
-              <strong>{{ planet.name }}</strong> - Status: {{planet.status}}, Radius: {{planet.radius}}, Discovered: {{planet.discovery}}
+              <strong>{{ planet.name }}</strong> - Status: {{ planet.status }}
             </li>
           </ul>
         </div>

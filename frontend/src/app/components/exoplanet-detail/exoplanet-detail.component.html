@@ -1,0 +1,77 @@
+<div class="detail-container" @pageTransition>
+  <div *ngIf="loading" class="loading-overlay">
+    <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+    <p>Loading exoplanet data...</p>
+  </div>
+
+  <div *ngIf="!loading && error" class="error-container card">
+    <h2>Exoplanet Not Found</h2>
+    <p>The requested exoplanet could not be found in our records.</p>
+    <button mat-stroked-button (click)="goBack()">Back to Dashboard</button>
+  </div>
+  
+  <div *ngIf="!loading && planet" class="planet-content">
+    <div class="info-card" [@scrollAnimation]="animationState">
+      <div class="header">
+        <h1>{{ planet.name }}</h1>
+        <div class="subtitle">
+          <mat-icon>{{ planet.icon }}</mat-icon>
+          <span>{{ planet.type }}</span>
+        </div>
+      </div>
+      
+      <div class="details">
+        <h2>Key Information</h2>
+        
+        <div class="info-item">
+          <span class="label">
+            <mat-icon>rocket_launch</mat-icon>
+            Distance from Earth
+          </span>
+          <span class="value">{{ planet.distance }} light-years</span>
+        </div>
+
+        <div class="info-item">
+          <span class="label">
+            <mat-icon>notes</mat-icon>
+            Description
+          </span>
+          <p class="value">{{ planet.description }}</p>
+        </div>
+      </div>
+
+      <div class="advanced-section">
+        <mat-slide-toggle
+            [checked]="isAdvancedMode"
+            (change)="isAdvancedMode = !isAdvancedMode"
+            color="primary">
+            Advanced Information
+        </mat-slide-toggle>
+
+        <div *ngIf="isAdvancedMode" @advancedMode class="advanced-details">
+            <div class="info-item">
+                <span class="label"><mat-icon>flare</mat-icon>Star Radius</span>
+                <span class="value">{{ planet.starRadius }} solar radii</span>
+            </div>
+            <div class="info-item">
+                <span class="label"><mat-icon>public</mat-icon>Planet Radius</span>
+                <span class="value">{{ planet.planetRadius }} Earth radii</span>
+            </div>
+            <div class="info-item">
+                <span class="label"><mat-icon>update</mat-icon>Orbital Period</span>
+                <span class="value">{{ planet.orbitalPeriod }} days</span>
+            </div>
+            <div class="info-item">
+                <span class="label"><mat-icon>timer</mat-icon>Transit Duration</span>
+                <span class="value">{{ planet.transitDuration }} hours</span>
+            </div>
+        </div>
+      </div>
+
+      <button mat-stroked-button class="back-button" (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon>
+        Back to Dashboard
+      </button>
+    </div>
+  </div>
+</div>

@@ -22,7 +22,7 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
   ]
 })
 export class HomeComponent implements AfterViewInit {
-  // Pega todos os elementos marcados com #scrollTarget
+  // Pega todos os elementos marcados com #scrollTarget no HTML
   @ViewChildren('scrollTarget') scrollTargets!: QueryList<ElementRef>;
 
   // Armazena o estado de animação ('in' ou 'out') para cada elemento

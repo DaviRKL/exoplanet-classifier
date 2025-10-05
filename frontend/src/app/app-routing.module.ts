@@ -1,18 +1,17 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { FeatureImportanceComponent } from './components/feature-importance/feature-importance.component';
-import { MetricsComponent } from './components/metrics/metrics.component';
-import { PredictComponent } from './components/predict/predict.component';
-import { TrainComponent } from './components/train/train.component';
 import { HomeComponent } from './components/home/home.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { ExoplanetDetailComponent } from './components/exoplanet-detail/exoplanet-detail.component';
+// **ADICIONE A IMPORTAÇÃO DO NOVO COMPONENTE**
+import { LearnSectionComponent } from './components/learn-section/learn-section.component';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent },
+  { path: '', component: HomeComponent, pathMatch: 'full' },
   { path: 'dashboard', component: DashboardComponent },
-  { path: 'train', component: TrainComponent },
-  { path: 'metrics', component: MetricsComponent },
-  { path: 'feature-importance', component: FeatureImportanceComponent },
+  { path: 'exoplanet/:name', component: ExoplanetDetailComponent },
+  // **ADICIONE A NOVA ROTA AQUI**
+  { path: 'learn', component: LearnSectionComponent },
   { path: '**', redirectTo: '' }
 ];
 
@@ -20,4 +19,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { } 

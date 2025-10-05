@@ -61,6 +61,8 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
+  /* Garante que o texto dentro do cartão comece com a cor primária */
+  color: var(--text-primary);
 }
 .planet-card mat-icon {
   color: var(--text-secondary);
@@ -176,7 +178,7 @@
   font-size: 0.9rem;
 }
 
-/* --- Rodapé de Ações (Estilo da div removido) --- */
+/* --- Rodapé de Ações --- */
 .dashboard-actions {
   display: flex;
   justify-content: space-between;
@@ -186,7 +188,6 @@
   border-top: 1px solid var(--border-color);
 }
 
-/* --- Novo Estilo para os Botões --- */
 .dashboard-actions button.mat-stroked-button {
   font-weight: 600;
   color: var(--accent-color);
@@ -194,7 +195,7 @@
   border-width: 2px;
   padding: 0 24px;
   line-height: 40px;
-  border-radius: 50px; /* Bordas arredondadas */
+  border-radius: 50px;
   transition: all 0.3s ease-in-out;
   overflow: hidden;
   position: relative;
@@ -214,19 +215,18 @@
 }
 
 .dashboard-actions button.mat-stroked-button:hover::before {
-  width: 100%; /* Efeito de preenchimento no hover */
+  width: 100%;
 }
 
 .dashboard-actions button.mat-stroked-button:hover {
-  color: var(--primary-bg); /* Cor do texto muda no hover */
-  transform: scale(1.05); /* Leve aumento de tamanho */
+  color: var(--primary-bg);
+  transform: scale(1.05);
 }
 
 .dashboard-actions mat-slide-toggle {
   font-weight: 600;
   font-size: 1rem;
 }
-
 
 /* --- Responsividade --- */
 @media (max-width: 992px) {
@@ -242,6 +242,14 @@
   .dashboard-actions {
     flex-direction: column;
     gap: 1.5rem;
-    border-top: none; /* Remove a linha no mobile para um look mais limpo */
+    border-top: none;
   }
 }
+
+/* **CORREÇÃO ADICIONADA AQUI** */
+/* Estilos para o link do cartão, para remover a decoração padrão de link */
+.planet-card-link {
+  text-decoration: none; /* Remove o sublinhado */
+  color: inherit;      /* Faz com que o texto herde a cor (branca) */
+  -webkit-tap-highlight-color: transparent; /* Remove o destaque azul ao tocar em telemóveis */
+}   

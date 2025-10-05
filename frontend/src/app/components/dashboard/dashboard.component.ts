@@ -2,8 +2,8 @@
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { Chart, ChartConfiguration, ChartData, registerables } from 'chart.js';
 import { timer } from 'rxjs';
+import { ExoplanetService } from '../../services/exoplanet.service';
 
-// Register all Chart.js components to prevent errors
 Chart.register(...registerables);
 
 @Component({
@@ -27,50 +27,20 @@ export class DashboardComponent implements OnInit {
   loading = true;
   error: string | null = null;
 
-  // --- Mock Data for the UI (in English) ---
-  lastPredictedPlanets = [
-    'Kepler-186f', 'TRAPPIST-1e', 'Proxima Centauri b', 'Kepler-452b',
-    'Gliese 581g', 'HD 209458 b', '55 Cancri e', 'Kepler-22b',
-    'LHS 1140 b', 'CoRoT-7b'
-  ];
-  
-  // New list for the advanced mode
-  latestExoplanetDiscoveries = [
-    { name: 'Kepler-186f', status: 'CONFIRMED', radius: '1.17 R⊕', discovery: '2014' },
-    { name: 'TRAPPIST-1e', status: 'CONFIRMED', radius: '0.91 R⊕', discovery: '2017' },
-    { name: 'Proxima Centauri b', status: 'CONFIRMED', radius: '1.1 R⊕', discovery: '2016' },
-    { name: 'Kepler-452b', status: 'CONFIRMED', radius: '1.63 R⊕', discovery: '2015' },
-    { name: 'Gliese 581g', status: 'UNCONFIRMED', radius: '1.5 R⊕', discovery: '2010' },
-    { name: 'HD 209458 b', status: 'CONFIRMED', radius: '1.38 Rj', discovery: '1999' },
-    { name: '55 Cancri e', status: 'CONFIRMED', radius: '1.87 R⊕', discovery: '2004' },
-    { name: 'Kepler-22b', status: 'CONFIRMED', radius: '2.4 R⊕', discovery: '2011' },
-    { name: 'LHS 1140 b', status: 'CONFIRMED', radius: '1.73 R⊕', discovery: '2017' },
-    { name: 'CoRoT-7b', status: 'CONFIRMED', radius: '1.58 R⊕', discovery: '2009' },
-  ];
+  lastPredictedPlanets: string[] = [];
+  latestExoplanetDiscoveries: any[] = [];
   
   bestModelName: string = 'Random Forest';
-  confusionMatrix: number[][] = [
-    [1250, 50],
-    [80, 1420]
-  ];
+  confusionMatrix: number[][] = [ [1250, 50], [80, 1420] ];
   confusionMatrixClasses: string[] = ['NEGATIVE', 'POSITIVE'];
 
-  // --- Chart Configurations ---
   public lineChartData: ChartConfiguration['data'] | null = null;
   public pieChartData: ChartData<'pie'> | null = null;
   public barChartData: ChartData<'bar'> | null = null;
 
   public commonChartOptions: ChartConfiguration['options'] = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        labels: {
-          color: 'var(--text-primary)',
-          font: { size: 12 }
-        }
-      },
-    },
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { labels: { color: 'var(--text-primary)', font: { size: 12 } } } },
     scales: {
       x: { ticks: { color: 'var(--text-secondary)' }, grid: { color: 'rgba(255, 255, 255, 0.1)' } },
       y: { ticks: { color: 'var(--text-secondary)' }, grid: { color: 'rgba(255, 255, 255, 0.1)' } }
@@ -78,21 +48,11 @@ export class DashboardComponent implements OnInit {
   };
 
   public pieChartOptions: ChartConfiguration['options'] = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        display: true,
-        position: 'top',
-        labels: {
-          color: 'var(--text-primary)',
-          font: { size: 12 }
-        }
-      }
-    }
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: true, position: 'top', labels: { color: 'var(--text-primary)', font: { size: 12 } } } }
   };
 
-  constructor() {}
+  constructor(private exoplanetService: ExoplanetService) {}
 
   ngOnInit(): void {
     this.refreshData();
@@ -101,6 +61,18 @@ export class DashboardComponent implements OnInit {
   refreshData(): void {
     this.loading = true;
     this.error = null;
+    
+    this.exoplanetService.getExoplanetNames().subscribe(names => {
+      this.lastPredictedPlanets = names;
+    });
+
+    this.exoplanetService.getAllExoplanets().subscribe(details => {
+      this.latestExoplanetDiscoveries = details.map(planet => ({
+        ...planet,
+        status: planet.type.includes('Unconfirmed') ? 'UNCONFIRMED' : 'CONFIRMED'
+      }));
+    });
+
     timer(800).subscribe(() => {
       this.prepareAllCharts();
       this.loading = false;
@@ -116,24 +88,14 @@ export class DashboardComponent implements OnInit {
   private preparePieChart(): void {
     this.pieChartData = {
       labels: ['Correct Predictions (%)', 'Incorrect Predictions (%)'],
-      datasets: [{
-        data: [95.8, 4.2],
-        backgroundColor: ['#4ade80', '#f87171'],
-        borderColor: 'var(--secondary-bg)',
-      }]
+      datasets: [{ data: [95.8, 4.2], backgroundColor: ['#4ade80', '#f87171'], borderColor: 'var(--secondary-bg)' }]
     };
   }
   
   private prepareBarChart(): void {
     this.barChartData = {
       labels: ['koi_fpflag_ss', 'koi_fpflag_co', 'koi_duration_err1', 'koi_prad', 'koi_steff_err1'],
-      datasets: [{
-        label: 'Importance',
-        data: [0.18, 0.15, 0.12, 0.09, 0.07],
-        backgroundColor: 'rgba(226, 139, 18, 0.7)',
-        borderColor: 'var(--accent-color)',
-        borderWidth: 1,
-      }]
+      datasets: [{ label: 'Importance', data: [0.18, 0.15, 0.12, 0.09, 0.07], backgroundColor: 'rgba(226, 139, 18, 0.7)', borderColor: 'var(--accent-color)', borderWidth: 1 }]
     };
   }
 

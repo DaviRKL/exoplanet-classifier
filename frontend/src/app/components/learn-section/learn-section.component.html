@@ -1,0 +1,48 @@
+<div class="learn-container" @fadeIn>
+  <div class="learn-header">
+    <h1>Learning Section</h1>
+    <p>Expand the modules below to learn more about the key concepts of this project.</p>
+  </div>
+
+  <mat-accordion multi="true" class="accordion-container">
+    <mat-expansion-panel class="expansion-panel">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          What is an Exoplanet?
+        </mat-panel-title>
+        <mat-panel-description>
+          Discover worlds beyond our solar system
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <div class="panel-content">
+        <p>
+          An exoplanet, or extrasolar planet, is a planet that orbits a star outside our Solar System. The first evidence of an exoplanet was noted in 1917, but the first confirmation of its detection occurred only in 1992.
+        </p>
+        <p>
+          Since then, thousands of exoplanets have been discovered, ranging in size from gas giants larger than Jupiter to rocky planets smaller than Earth. These distant worlds are found through various methods, the most common being the <strong>transit method</strong>, where a telescope measures the slight dimming in a star's brightness as a planet passes in front of it. This is exactly the type of data our project uses.
+        </p>
+      </div>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel class="expansion-panel">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          What is Machine Learning?
+        </mat-panel-title>
+        <mat-panel-description>
+          How computers learn from data
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <div class="panel-content">
+        <p>
+          Machine Learning is a field of artificial intelligence that gives computers the ability to "learn" from data without being explicitly programmed. Instead of following a fixed set of rules, a machine learning model identifies patterns in training data to make predictions or decisions about new data.
+        </p>
+        <p>
+          In this project, we use machine learning for a <strong>classification</strong> task. We "train" our model with thousands of examples from NASA's exoplanet catalog, where each example has already been classified by scientists as "CONFIRMED" or "FALSE POSITIVE". The model learns to associate the features of a signal with a final classification.
+        </p>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>

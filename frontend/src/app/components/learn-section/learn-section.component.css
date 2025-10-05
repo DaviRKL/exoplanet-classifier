@@ -1,0 +1,69 @@
+.learn-container {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.learn-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.learn-header h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+}
+
+.learn-header p {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+}
+
+.accordion-container .mat-expansion-panel {
+  background-color: var(--secondary-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px !important; /* Importante para sobrescrever o estilo padrão */
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.accordion-container .mat-expansion-panel-header {
+  font-size: 1.2rem;
+  font-weight: 600;
+  border-radius: 12px;
+}
+
+.accordion-container .mat-expansion-panel-header:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.accordion-container .mat-expansion-panel-header.mat-expanded {
+  border-bottom: 1px solid var(--border-color);
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.accordion-container .mat-panel-description {
+  color: var(--text-secondary);
+  font-weight: 400;
+  font-size: 1rem;
+}
+
+.panel-content {
+  padding: 1rem 1.5rem 1.5rem 1.5rem;
+  line-height: 1.8;
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+}
+
+.panel-content p {
+  margin-bottom: 1rem;
+}
+
+.panel-content strong {
+  color: var(--accent-color);
+  font-weight: 600;
+}   
