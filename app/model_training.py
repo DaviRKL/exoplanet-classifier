@@ -30,10 +30,8 @@ FEATURE_COLUMNS: List[str] = [
     "koi_duration",
     "koi_depth",
     "koi_prad",
-    "koi_srad",
-    "koi_smass",
-    "koi_model_snr",
-    "koi_impact",
+    "koi_steff",
+    "koi_srad"
 ]
 TARGET_COLUMN = "koi_disposition"
 

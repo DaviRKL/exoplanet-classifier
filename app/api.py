@@ -46,10 +46,8 @@ class ExoplanetFeatures(BaseModel):
     koi_duration: float = Field(..., description="Transit duration in hours")
     koi_depth: float = Field(..., description="Transit depth (fraction of stellar flux)")
     koi_prad: float = Field(..., description="Planetary radius in Earth radii")
+    koi_steff: float = Field(..., description="Stellar Effective Temperature")
     koi_srad: float = Field(..., description="Stellar radius in solar radii")
-    koi_smass: float = Field(..., description="Stellar mass in solar masses")
-    koi_model_snr: float = Field(..., description="Transit model signal-to-noise ratio")
-    koi_impact: float = Field(..., description="Transit impact parameter")
 
 
 class PredictionResponse(BaseModel):
