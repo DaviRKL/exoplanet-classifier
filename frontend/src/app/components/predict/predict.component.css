@@ -1,24 +1,291 @@
-.predict-form {
+.predict-card {
+  background: linear-gradient(180deg, #0b1724 0%, #0e2030 100%);
+  color: #e6f0fb;
+  padding: 18px;
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(2,12,27,0.6);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+  will-change: transform, box-shadow;
+  border: 1px solid rgba(255,255,255,0.02);
+}
+
+.predict-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 18px 36px rgba(2,12,27,0.75);
+}
+
+.predict-header {
   display: flex;
-  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+  margin-bottom: 12px;
+}
+
+.predict-avatar {
+  background: rgba(255,255,255,0.03);
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.title-block mat-card-title {
+  font-weight: 700;
+  font-size: 1.05rem;
+  margin-bottom: 2px;
+}
+
+.title-block mat-card-subtitle {
+  color: rgba(230,240,251,0.75);
+  font-size: 0.9rem;
+}
+
+/* form layout */
+.predict-form {
+  display: block;
 }
 
 .form-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 18px;
+  margin-top: 8px;
 }
 
+/* ensure form fields occupy full cell and are taller for readability */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* heading-like label above each input */
+.field-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: rgba(230,240,251,0.85);
+  margin-bottom: 2px;
+}
+
+/* style inputs and labels for dark background; use ::ng-deep for internal mat classes */
+::ng-deep .mat-form-field-label {
+  color: rgba(230,240,251,0.75) !important;
+  font-weight: 600;
+}
+
+::ng-deep .mat-input-element {
+  color: #ffffff !important;
+  font-size: 14px;
+  padding: 8px 0 !important;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+  color: rgba(255,255,255,0.06);
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline-thick {
+  border-color: rgba(255,255,255,0.08) !important;
+}
+
+/* ensure form-field has enough height and padding so the label can float cleanly */
+::ng-deep .mat-form-field-wrapper {
+  padding-bottom: 4px !important;
+}
+
+::ng-deep .mat-form-field-infix {
+  padding-top: 10px !important;
+  padding-bottom: 6px !important;
+}
+
+/* small tweak for mat-form-field when label is external */
+.no-label-field ::ng-deep .mat-form-field-infix {
+  padding-top: 8px !important;
+}
+
+/* minimum field height to avoid label overlap on compact layouts */
+::ng-deep .mat-form-field-flex {
+  min-height: 56px !important;
+}
+
+/* actions */
 .actions {
-  margin-top: 16px;
+  margin-top: 18px;
   display: flex;
   justify-content: flex-end;
+  gap: 12px;
 }
 
-.result {
-  margin-top: 24px;
+.btn-clear {
+  color: rgba(230,240,251,0.9);
+  border-color: rgba(230,240,251,0.12);
+  min-width: 92px;
+}
+
+.btn-predict {
+  min-width: 110px;
+}
+
+/* result card */
+.result-card {
+  margin-top: 16px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.03);
+}
+
+.result-chip {
+  height: 40px;
+  font-weight: 700;
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 1.1rem;
+}
+
+.result-text {
+  margin-left: 6px;
+}
+
+.result-summary {
+  color: rgba(230,240,251,0.8);
+  font-size: 0.92rem;
+}
+
+/* probability badge and icon */
+.prob-badge {
+  background: rgba(255,255,255,0.04);
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-weight: 700;
+  color: #e6f0fb;
+}
+
+/* small improvements */
+.error-msg {
+  display: block;
+  margin-top: 12px;
+  color: #ffb4b4;
+}
+
+.progress {
+  margin-top: 12px;
+  border-radius: 4px;
+}
+
+/* upload row and table preview styles */
+.upload-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.upload-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.file-name {
+  color: rgba(230,240,251,0.8);
+  font-size: 0.95rem;
+  max-width: 360px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.send-btn {
+  margin-left: auto;
+}
+
+.table-wrap {
+  overflow: auto;
+  max-width: 100%;
+  border-radius: 8px;
+  margin-top: 8px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+th, td {
+  padding: 8px 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.02);
+  text-align: left;
+}
+
+th {
+  font-weight: 700;
+  color: rgba(230,240,251,0.9);
+}
+
+.pred-label {
+  font-weight: 700;
+  color: #fff;
+}
+
+.pred-prob {
+  color: rgba(230,240,251,0.9);
+}
+
+/* make mat-form-field outlines visually thinner and subtler */
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline,
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline-thick {
+  stroke-width: 0.8px !important; /* thinner stroke */
+  stroke: rgba(255,255,255,0.045) !important; /* very subtle baseline color */
+}
+
+/* focused / hover state: keep subtle but slightly brighter */
+::ng-deep .mat-form-field-appearance-outline:hover .mat-form-field-outline-thick,
+::ng-deep .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+  stroke-width: 0.8px !important;
+  stroke: rgba(230,240,251,0.10) !important; /* slightly brighter on focus */
+  box-shadow: none !important;
+}
+
+/* also prevent ripple/highlight showing yellow on elements inside the card */
+::ng-deep .mat-ripple-element {
+  background-color: rgba(255,255,255,0.06) !important;
+}
+
+/* responsive adjustments */
+@media (max-width: 600px) {
+  .actions {
+    justify-content: stretch;
+    flex-direction: column-reverse;
+  }
+
+  .btn-clear, .btn-predict {
+    width: 100%;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .result-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .send-btn {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  table {
+    font-size: 0.85rem;
+  }
 }

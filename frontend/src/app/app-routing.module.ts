@@ -5,6 +5,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ExoplanetDetailComponent } from './components/exoplanet-detail/exoplanet-detail.component';
 // **ADICIONE A IMPORTAÇÃO DO NOVO COMPONENTE**
 import { LearnSectionComponent } from './components/learn-section/learn-section.component';
+import { PredictComponent } from './components/predict/predict.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -12,6 +13,7 @@ const routes: Routes = [
   { path: 'exoplanet/:name', component: ExoplanetDetailComponent },
   // **ADICIONE A NOVA ROTA AQUI**
   { path: 'learn', component: LearnSectionComponent },
+  { path: 'predict', component: PredictComponent },
   { path: '**', redirectTo: '' }
 ];
 
@@ -19,4 +21,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { } 
+export class AppRoutingModule { }
