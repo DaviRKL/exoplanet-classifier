@@ -7,3 +7,4 @@ xgboost
 joblib
 matplotlib
 seaborn
+scipy
