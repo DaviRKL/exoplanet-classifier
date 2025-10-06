@@ -105,7 +105,7 @@
 
 .about-image {
   max-width: 350px;
-  border-radius: 50%;
+  border-radius: 70%;
   background: var(--secondary-bg);
   box-shadow: 0 10px 30px rgba(0,0,0,0.3);
 }
