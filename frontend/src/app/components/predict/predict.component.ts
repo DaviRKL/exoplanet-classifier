@@ -1,4 +1,4 @@
-﻿import { Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
 import { HttpClient } from '@angular/common/http';
@@ -10,14 +10,25 @@ import { HttpClient } from '@angular/common/http';
 })
 export class PredictComponent {
   readonly fields = [
+    { name: 'koi_fpflag_nt', label: 'koi_fpflag_nt' },
+    { name: 'koi_fpflag_ss', label: 'koi_fpflag_ss' },
+    { name: 'koi_fpflag_co', label: 'koi_fpflag_co' },
+    { name: 'koi_fpflag_ec', label: 'koi_fpflag_ec' },
     { name: 'koi_period', label: 'koi_period' },
+    { name: 'koi_time0bk', label: 'koi_time0bk' },
+    { name: 'koi_impact', label: 'koi_impact' },
     { name: 'koi_duration', label: 'koi_duration' },
     { name: 'koi_depth', label: 'koi_depth' },
     { name: 'koi_prad', label: 'koi_prad' },
-    { name: 'koi_srad', label: 'koi_srad' },
-    { name: 'koi_smass', label: 'koi_smass' },
+    { name: 'koi_teq', label: 'koi_teq' },
+    { name: 'koi_insol', label: 'koi_insol' },
     { name: 'koi_model_snr', label: 'koi_model_snr' },
-    { name: 'koi_impact', label: 'koi_impact' }
+    { name: 'koi_steff', label: 'koi_steff' },
+    { name: 'koi_slogg', label: 'koi_slogg' },
+    { name: 'koi_srad', label: 'koi_srad' },
+    { name: 'ra', label: 'ra' },
+    { name: 'dec', label: 'dec' },
+    { name: 'koi_kepmag', label: 'koi_kepmag' },
   ];
 
   form: FormGroup;
@@ -37,14 +48,25 @@ export class PredictComponent {
 
   constructor(private fb: FormBuilder, private api: ApiService, private http: HttpClient) {
     this.form = this.fb.group({
+      koi_fpflag_nt: [0, [Validators.required, Validators.min(0)]],
+      koi_fpflag_ss: [0, [Validators.required, Validators.min(0)]],
+      koi_fpflag_co: [0, [Validators.required, Validators.min(0)]],
+      koi_fpflag_ec: [0, [Validators.required, Validators.min(0)]],
       koi_period: [365.25, [Validators.required, Validators.min(0)]],
+      koi_time0bk: [150.0, [Validators.required]],
+      koi_impact: [0.45, [Validators.required, Validators.min(0)]],
       koi_duration: [12.4, [Validators.required, Validators.min(0)]],
       koi_depth: [0.0018, [Validators.required, Validators.min(0)]],
       koi_prad: [1.4, [Validators.required, Validators.min(0)]],
+      koi_teq: [280.0, [Validators.required, Validators.min(0)]],
+      koi_insol: [1.1, [Validators.required, Validators.min(0)]],
+      koi_model_snr: [45.0, [Validators.required, Validators.min(0)]],
+      koi_steff: [5700.0, [Validators.required, Validators.min(0)]],
+      koi_slogg: [4.40, [Validators.required, Validators.min(0)]],
       koi_srad: [0.95, [Validators.required, Validators.min(0)]],
-      koi_smass: [0.9, [Validators.required, Validators.min(0)]],
-      koi_model_snr: [45, [Validators.required, Validators.min(0)]],
-      koi_impact: [0.45, [Validators.required, Validators.min(0)]]
+      ra: [290.0, [Validators.required]],
+      dec: [44.5, [Validators.required]],
+      koi_kepmag: [14.5, [Validators.required, Validators.min(0)]],
     });
   }
 
@@ -128,7 +150,7 @@ export class PredictComponent {
       let inQuotes = false;
       for (let i = 0; i < line.length; i++) {
         const ch = line[i];
-        if (ch === '"' ) {
+        if (ch === '"') {
           if (inQuotes && line[i + 1] === '"') { cur += '"'; i++; continue; }
           inQuotes = !inQuotes;
           continue;
@@ -191,13 +213,34 @@ export class PredictComponent {
 
   private buildCsvFromParsed(): string {
     const cols = this.headers;
-    const rows = this.parsedRows.map(r => cols.map(c => {
-      const v = (r[c] ?? '').toString();
-      if (v.includes(',') || v.includes('"') || v.includes('\n')) {
-        return `"${v.replace(/"/g, '""')}"`;
-      }
-      return v;
-    }).join(','));
-    return [cols.join(','), ...rows].join('\n');
+    const rows = this.parsedRows.map(r =>
+      cols.map(c => {
+        const v = (r[c] ?? '').toString();
+        if (v.includes(',') || v.includes('"') || v.includes('\n')) {
+          return `"${v.replace(/\"/g, '""')}"`;
+        }
+        return v;
+      }).join(',')
+    );
+    return [cols.join(',') , ...rows].join('\n');
+  }
+
+    // Ensure decimals use dot instead of comma as the user types
+  onNumericInput(event: Event, controlName: string) {
+    const input = event.target as HTMLInputElement;
+    if (!input) return;
+    const fixed = input.value.replace(/,/g, '.');
+    if (fixed !== input.value) {
+      input.value = fixed;
+    }
+    const parsed = fixed === '' ? null : Number(fixed);
+    if (!Number.isNaN(parsed as number)) {
+      this.form.get(controlName)?.setValue(parsed, { emitEvent: false });
+    }
   }
 }
+
+
+
+
+

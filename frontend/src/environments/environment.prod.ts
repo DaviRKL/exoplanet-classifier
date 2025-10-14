@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  apiBaseUrl: 'https://your-production-endpoint.example.com'
+  // In containers, the Angular app is served by nginx which proxies /api to the backend.
+  apiBaseUrl: '/api'
 };

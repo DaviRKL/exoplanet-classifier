@@ -2,11 +2,12 @@
 from __future__ import annotations
 
 from io import BytesIO
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 import joblib
 import pandas as pd
 from fastapi import FastAPI, File, HTTPException, Query, UploadFile
+import logging
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
@@ -17,14 +18,26 @@ from app.model_training import (
     build_training_table,
     generate_confusion_plot,
     generate_feature_importance_plot,
+    preprocess_dataset,
     train_models,
 )
 
-app = FastAPI(title="Exoplanet Classifier API", version="2.0.0")
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
+logger = logging.getLogger("exoplanet.api")
+
+# Inform FastAPI that the app is served behind a reverse proxy under the 
+# path prefix "/api". This ensures the Swagger UI points to /api/openapi.json
+# while the upstream keeps serving /openapi.json (nginx strips the prefix).
+app = FastAPI(title="Exoplanet Classifier API", version="2.0.0", root_path="/api")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=['http://localhost:4200', 'http://127.0.0.1:4200'],
+    allow_origins=[
+        'http://localhost:4200',
+        'http://127.0.0.1:4200',
+        'http://localhost:8080',
+        'http://127.0.0.1:8080',
+    ],
     allow_credentials=True,
     allow_methods=['*'],
     allow_headers=['*'],
@@ -40,14 +53,31 @@ FEATURE_IMPORTANCES: Dict[str, float] = {}
 
 
 class ExoplanetFeatures(BaseModel):
-    """Input schema that mirrors the columns used by the model."""
+    """Input schema aligned with training features.
 
-    koi_period: float = Field(..., description="Orbital period in days")
-    koi_duration: float = Field(..., description="Transit duration in hours")
-    koi_depth: float = Field(..., description="Transit depth (fraction of stellar flux)")
-    koi_prad: float = Field(..., description="Planetary radius in Earth radii")
-    koi_steff: float = Field(..., description="Stellar Effective Temperature")
-    koi_srad: float = Field(..., description="Stellar radius in solar radii")
+    All fields are optional to allow partial payloads; missing values are
+    imputed by the pipeline's SimpleImputer during preprocessing.
+    """
+
+    koi_fpflag_nt: Optional[float] = Field(None, description="Non-transit FP flag (0/1)")
+    koi_fpflag_ss: Optional[float] = Field(None, description="Stellar FP flag (0/1)")
+    koi_fpflag_co: Optional[float] = Field(None, description="Centroid offset FP flag (0/1)")
+    koi_fpflag_ec: Optional[float] = Field(None, description="Ephemeris match FP flag (0/1)")
+    koi_period: Optional[float] = Field(None, description="Orbital period (days)")
+    koi_time0bk: Optional[float] = Field(None, description="Transit epoch (BKJD)")
+    koi_impact: Optional[float] = Field(None, description="Impact parameter")
+    koi_duration: Optional[float] = Field(None, description="Transit duration (hours)")
+    koi_depth: Optional[float] = Field(None, description="Transit depth (fraction)")
+    koi_prad: Optional[float] = Field(None, description="Planet radius (Earth radii)")
+    koi_teq: Optional[float] = Field(None, description="Equilibrium temperature (K)")
+    koi_insol: Optional[float] = Field(None, description="Insolation flux (Earth=1)")
+    koi_model_snr: Optional[float] = Field(None, description="Model SNR")
+    koi_steff: Optional[float] = Field(None, description="Stellar Teff (K)")
+    koi_slogg: Optional[float] = Field(None, description="log g (cm/s^2)")
+    koi_srad: Optional[float] = Field(None, description="Stellar radius (Rsun)")
+    ra: Optional[float] = Field(None, description="Right ascension (deg)")
+    dec: Optional[float] = Field(None, description="Declination (deg)")
+    koi_kepmag: Optional[float] = Field(None, description="Kepler magnitude")
 
 
 class PredictionResponse(BaseModel):
@@ -97,6 +127,7 @@ def _load_artifacts() -> None:
     global MODEL_PIPELINE, LABEL_ENCODER, FEATURE_NAMES, BEST_MODEL_NAME, TRAINING_RESULTS, FEATURE_IMPORTANCES
 
     if not MODEL_PATH.exists():
+        logger.info("MODEL_PATH %s not found. API will start without a trained model.", MODEL_PATH)
         return
 
     bundle = joblib.load(MODEL_PATH)
@@ -110,6 +141,7 @@ def _load_artifacts() -> None:
     else:
         TRAINING_RESULTS = {}
     FEATURE_IMPORTANCES = bundle.get("feature_importances", {})
+    logger.info("Loaded model artifacts: model=%s features=%d", BEST_MODEL_NAME, len(FEATURE_NAMES))
 
 
 def _ensure_model_loaded() -> None:
@@ -138,17 +170,40 @@ def health_check() -> dict[str, Any]:
         "model_loaded": MODEL_PIPELINE is not None,
     }
 
+@app.get("/healthz")
+def healthz() -> dict[str, Any]:
+    return {"status": "ok", "model_loaded": MODEL_PIPELINE is not None}
+
 @app.post("/predict", response_model=PredictionResponse)
 def predict(features: ExoplanetFeatures) -> PredictionResponse:
     """Predict the KOI disposition given the submitted measurements."""
 
     _ensure_model_loaded()
 
-    ordered_values = [getattr(features, name) for name in FEATURE_NAMES]
-    model_input = pd.DataFrame([ordered_values], columns=FEATURE_NAMES, dtype=float)
+    def _to_float(v: Any) -> Optional[float]:
+        if v is None:
+            return None
+        if isinstance(v, (int, float)):
+            return float(v)
+        if isinstance(v, str):
+            v = v.strip().replace(",", ".")
+            try:
+                return float(v)
+            except ValueError:
+                return None
+        return None
+
+    raw = features.model_dump() if hasattr(features, "model_dump") else features.dict()
+    row = {name: _to_float(raw.get(name)) for name in FEATURE_NAMES}
+    model_input = pd.DataFrame([row])
 
     try:
-        encoded_prediction = MODEL_PIPELINE.predict(model_input)
+        processed = preprocess_dataset(model_input, expect_target=False)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+    try:
+        encoded_prediction = MODEL_PIPELINE.predict(processed[FEATURE_NAMES])
     except Exception as exc:  # pragma: no cover - defensive
         raise HTTPException(status_code=500, detail=f"Model inference failed: {exc}") from exc
 
@@ -231,7 +286,23 @@ def _apply_bundle(bundle, metrics_map: Dict[str, TrainingMetrics]) -> None:
     FEATURE_IMPORTANCES = bundle.model.feature_importances
 
 
-try:
-    _load_artifacts()
-except Exception as exc:  # pragma: no cover - defensive
-    print(f"Failed to load persisted artifacts: {exc}")
+@app.on_event("startup")
+def on_startup() -> None:
+    logger.info("Starting Exoplanet Classifier API...")
+    try:
+        _load_artifacts()
+    except Exception as exc:  # pragma: no cover - defensive
+        logger.exception("Failed to load persisted artifacts: %s", exc)
+    logger.info("Startup complete. model_loaded=%s", MODEL_PIPELINE is not None)
+
+@app.on_event("shutdown")
+def on_shutdown() -> None:
+    logger.info("Shutting down Exoplanet Classifier API.")
+
+
+
+
+
+
+
+

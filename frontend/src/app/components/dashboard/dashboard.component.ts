@@ -1,10 +1,31 @@
-﻿import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { Chart, ChartConfiguration, ChartData, registerables } from 'chart.js';
 import { timer } from 'rxjs';
 import { ExoplanetService } from '../../services/exoplanet.service';
 
 Chart.register(...registerables);
+// Global Chart.js defaults for better readability on dark theme
+// Do NOT overwrite plugins object; extend existing to avoid side effects
+// (Chart.defaults as any).color = '#ffffff';
+// (Chart.defaults.plugins as any) = (Chart.defaults.plugins as any) || {};
+// (Chart.defaults.plugins as any).legend = {
+//   ...((Chart.defaults.plugins as any).legend || {}),
+//   labels: { color: '#ffffff' }
+// } as any;
+// (Chart.defaults.plugins as any).title = {
+//   ...((Chart.defaults.plugins as any).title || {}),
+//   color: '#ffffff'
+// } as any;
+// const _scales: any = (Chart.defaults as any).scales || {};
+// if (_scales.category) {
+//   _scales.category.ticks = { ...(_scales.category.ticks || {}), color: '#ffffff' };
+//   _scales.category.grid = { ...(_scales.category.grid || {}), color: 'rgba(255,255,255,0.12)' };
+// }
+// if (_scales.linear) {
+//   _scales.linear.ticks = { ...(_scales.linear.ticks || {}), color: '#ffffff' };
+//   _scales.linear.grid = { ...(_scales.linear.grid || {}), color: 'rgba(255,255,255,0.12)' };
+// }
 
 @Component({
   selector: 'app-dashboard',
@@ -40,16 +61,16 @@ export class DashboardComponent implements OnInit {
 
   public commonChartOptions: ChartConfiguration['options'] = {
     responsive: true, maintainAspectRatio: false,
-    plugins: { legend: { labels: { color: 'var(--text-primary)', font: { size: 12 } } } },
+    plugins: { legend: { labels: { color: '#ffffff', font: { size: 12 } } } },
     scales: {
-      x: { ticks: { color: 'var(--text-secondary)' }, grid: { color: 'rgba(255, 255, 255, 0.1)' } },
-      y: { ticks: { color: 'var(--text-secondary)' }, grid: { color: 'rgba(255, 255, 255, 0.1)' } }
+      x: { ticks: { color: '#ffffff' }, grid: { color: 'rgba(255,255,255,0.12)' } },
+      y: { ticks: { color: '#ffffff' }, grid: { color: 'rgba(255,255,255,0.12)' } }
     }
   };
 
   public pieChartOptions: ChartConfiguration['options'] = {
     responsive: true, maintainAspectRatio: false,
-    plugins: { legend: { display: true, position: 'top', labels: { color: 'var(--text-primary)', font: { size: 12 } } } }
+    plugins: { legend: { display: true, position: 'top', labels: { color: '#ffffff', font: { size: 12 } } } }
   };
 
   constructor(private exoplanetService: ExoplanetService) {}

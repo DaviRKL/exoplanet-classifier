@@ -10,14 +10,15 @@
         <div class="field" *ngFor="let field of fields">
           <div class="field-label">{{ field.label }}</div>
           <mat-form-field appearance="outline" class="no-label-field">
-            <input matInput type="number" [formControlName]="field.name" step="any" aria-label="{{ field.label }}" />
+            <input matInput type="number" [formControlName]="field.name" step="any" aria-label="{{ field.label }}" (input)="onNumericInput($event, field.name)" inputmode="decimal" />
             <mat-error *ngIf="form.get(field.name)?.hasError('required')">Obrigatory</mat-error>
             <mat-error *ngIf="form.get(field.name)?.hasError('min')">Value must be positive</mat-error>
           </mat-form-field>
         </div>
       </div>
       <div class="actions">
-        <button mat-raised-button color="primary" type="submit" [disabled]="loading">Predict</button>
+        
+        <button mat-raised-button class="btn-predict" type="submit" [disabled]="loading">Predict</button>
       </div>
     </form>
 
