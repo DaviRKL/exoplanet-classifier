@@ -7,6 +7,7 @@ from typing import Any, Dict, List, Optional
 import joblib
 import pandas as pd
 from fastapi import FastAPI, File, HTTPException, Query, UploadFile
+import os
 import logging
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
@@ -30,15 +31,25 @@ logger = logging.getLogger("exoplanet.api")
 # while the upstream keeps serving /openapi.json (nginx strips the prefix).
 app = FastAPI(title="Exoplanet Classifier API", version="2.0.0", root_path="/api")
 
+# CORS: allow local dev by default and support override via ALLOW_ORIGINS env
+default_origins = [
+    'http://localhost:4200',
+    'http://127.0.0.1:4200',
+    'http://localhost:8080',
+    'http://127.0.0.1:8080',
+]
+env_origins = os.getenv('ALLOW_ORIGINS')
+if env_origins:
+    origins = [o.strip() for o in env_origins.split(',') if o.strip()]
+else:
+    origins = default_origins
+
+allow_all = '*' in origins
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        'http://localhost:4200',
-        'http://127.0.0.1:4200',
-        'http://localhost:8080',
-        'http://127.0.0.1:8080',
-    ],
-    allow_credentials=True,
+    allow_origins=['*'] if allow_all else origins,
+    allow_credentials=False if allow_all else True,
     allow_methods=['*'],
     allow_headers=['*'],
 )
