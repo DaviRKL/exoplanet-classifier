@@ -33,6 +33,23 @@ body {
   line-height: 1.6;
 }
 
+/* Padrão: texto claro em elementos comuns e componentes Angular Material */
+p, span, li, label, mat-label {
+  color: var(--text-primary);
+}
+
+.mat-expansion-panel-body,
+.mat-expansion-panel-header-title,
+.mat-expansion-panel-header-description,
+.mat-slide-toggle-content {
+  color: var(--text-primary);
+}
+
+/* Ícones do Angular Material em branco por padrão no tema escuro */
+.mat-icon {
+  color: var(--text-primary);
+}
+
 /* Estilos de Conteúdo Principal e Animação */
 .main-content {
   flex: 1;

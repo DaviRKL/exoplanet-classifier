@@ -223,9 +223,28 @@
   transform: scale(1.05);
 }
 
+/* Ícone de refresh branco por padrão e acompanhando o hover */
+.dashboard-actions button.mat-stroked-button mat-icon {
+  color: var(--text-primary);
+  transition: color 0.3s ease-in-out;
+}
+.dashboard-actions button.mat-stroked-button:hover mat-icon {
+  color: var(--primary-bg);
+}
+
+/* Caso o refresh esteja fora do botão, garanta branco também */
+.dashboard-actions mat-icon {
+  color: var(--text-primary) !important;
+}
+
 .dashboard-actions mat-slide-toggle {
   font-weight: 600;
   font-size: 1rem;
+}
+
+/* Garante texto claro no rótulo do toggle */
+.dashboard-actions .mat-slide-toggle-content {
+  color: var(--text-primary);
 }
 
 /* --- Responsividade --- */

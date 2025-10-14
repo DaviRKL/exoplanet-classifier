@@ -36,6 +36,21 @@
   border-radius: 12px;
 }
 
+/* Título e subtítulo do cabeçalho em branco para melhor leitura */
+.accordion-container .mat-expansion-panel-header-title,
+.accordion-container .mat-expansion-panel-header-description {
+  color: var(--text-primary);
+}
+
+/* Deixa o ícone de seta (indicador) do Angular Material em branco */
+/* Usa ::ng-deep para atravessar o encapsulamento do Material */
+:host ::ng-deep .mat-expansion-panel-header .mat-expansion-indicator {
+  color: var(--text-primary) !important;
+}
+:host ::ng-deep .mat-expansion-panel-header .mat-expansion-indicator::after {
+  border-color: var(--text-primary) !important;
+}
+
 .accordion-container .mat-expansion-panel-header:hover {
   background-color: rgba(255, 255, 255, 0.05);
 }
@@ -47,7 +62,7 @@
 }
 
 .accordion-container .mat-panel-description {
-  color: var(--text-secondary);
+  color: var(--text-primary);
   font-weight: 400;
   font-size: 1rem;
 }
@@ -56,7 +71,7 @@
   padding: 1rem 1.5rem 1.5rem 1.5rem;
   line-height: 1.8;
   font-size: 1.05rem;
-  color: var(--text-secondary);
+  color: var(--text-primary);
 }
 
 .panel-content p {
